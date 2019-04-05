@@ -15,17 +15,14 @@ const db = {
 }
 .ensureIndex({fieldName : 'year'});
 
-
-
 let task = {
   task_id: 0
-  project_name: 0 
   task_name: '', 
 }
 
 let spans = {
-  task_id:
+  task_name:
   start_time:
   end_time:
 }
-
+module.exports = {taskDb: db.tasks, spanDb: db.spans}
