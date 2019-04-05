@@ -42,13 +42,11 @@
     startTimer(startTime){
       start = startTime; 
       tick = setInterval(this.elapsedTime, 1000);
-      // return start;
     }
 
     stopTimer(){
       clearInterval(tick);
       tick = 0;
-      // return Date.now();
     }
   }
 }
