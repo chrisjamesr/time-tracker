@@ -1,6 +1,6 @@
 const {app, BrowserWindow, ipcMain} = require('electron')
 const path = require('path');
-
+const {taskDb, spanDb } = require('./lib/db.js')
 const createMainWindow = require('./renderer/window.js')
 let counting
 app.on('ready', ()=>{  
