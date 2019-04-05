@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <title>
+      Task Timer
+    </title>
+    <link rel="stylesheet" href="../css/style.css">
+  </head>
+  <body>
+
+    <section id="control">
+
+      <div class="button button-start" id="stop-start-button">
+        <span>start</span>
+      </div>
+
+      <form action="">
+        <select id="task-select" name="task-bar">
+          <option value="" selected>Select a Task</option>
+          <option value="">New Task</option>  
+          <optgroup label="Tasks">
+            <option value="">Task 1</option>
+            <option value="">Task 2</option>
+            <option value="">Task 3</option>
+            <option value="">Task 4</option>
+          </optgroup>
+        </select>  
+      </form>
+
+    </section>
+    
+    
+
+      <section id="timer-display">
+        <div id="timer">
+          00:00:00
+        </div>
+      </section>
+      <hr>
+      <section id="info">
+        <span id="task-name">Task Name</span> | <span>Dashboard<span>
+      </section>  
+      
+    </main>
+      
+    </div>
+    <script>
+      // You can also require other files to run in this process
+      require('../renderer.js')
+    </script>
+  </body>
+</html>

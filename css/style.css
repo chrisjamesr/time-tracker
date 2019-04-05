@@ -1,0 +1,70 @@
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+section#control{
+  display:flex;
+  flex-direction: row;
+  justify-content: space-around;  
+  align-items: baseline;
+  width:100%;
+}
+
+section#timer-display {
+  padding-top: 2.5%;
+
+}
+
+section#info {
+  width:100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+form {
+  width:70%;
+}
+
+form > select {
+  width: 100%;
+  font-size: 1rem;  
+}
+
+
+.button:hover {
+  opacity:1;
+  cursor: pointer;
+}
+.button {
+  border-radius: 100%;
+  height: 60px;
+  width: 60px;
+  /*opacity: .5;*/
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  text-align: center;
+  line-height: 60px;
+  cursor: pointer;
+}
+
+.button-start {
+  background-color: rgb(89, 165, 3);
+  opacity: .5;
+}
+.button-start:hover {
+  opacity:1;
+}
+.button-stop {
+  opacity:1;
+  background-color:red;
+}
+
+div#timer {
+  font: 3em "Courier New", sans-serif;
+  letter-spacing: 5px;
+}
