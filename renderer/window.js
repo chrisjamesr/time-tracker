@@ -21,11 +21,11 @@ function createMainWindow(options){
   });
 
   mainWindow.loadURL(path.join('file://', __dirname, 'index.html'));
-
   mainWindow.on('close', ()=>{
     mainWindow = null;
     console.log('main window closed')
   })
+  return mainWindow;
 }
 
 
