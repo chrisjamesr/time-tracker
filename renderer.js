@@ -92,6 +92,13 @@ function replaceElement(elem){
   return selectForm.replaceChild(elem, selectForm.children[0])
 }
 
+function createTitleDiv(){
+  let selectedOption = Array.from(selectEl).find(ele=> ele.selected)
+  let titleDiv = document.createElement('div')
+  titleDiv.innerText = selectedOption.innerText
+  return titleDiv;
+}
+
 function toggleTimer(){
   if (!taskName) return alert('Select a task');
   if(!counting){
@@ -101,12 +108,14 @@ function toggleTimer(){
     })
     buttonEl.classList.replace('button-start','button-stop');
     buttonEl.innerText = "stop";  
+    replaceElement(createTitleDiv())
   } else {
     ipcRenderer.send('stop-counter', { 
       stopTime: Date.now(), 
       taskName: taskName,
       spanId: span.spanId
     });
+    replaceElement(selectEl)
     buttonEl.classList.replace('button-stop','button-start');
     buttonEl.innerText = "start";
   }
