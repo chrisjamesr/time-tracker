@@ -21,7 +21,7 @@ app.on('ready', ()=>{
 ipcMain.on("start-counter", (e, {taskName, startTime})=>{
   counting = true
 
-  console.log(`start-counter\ntaskName: ${taskName}\nstartTime: ${startTime}\n`)
+  // console.log(`start-counter\ntaskName: ${taskName}\nstartTime: ${startTime}\n`)
 
   insertSpan(taskName, startTime)
     .then(taskSpan=> {
@@ -45,7 +45,7 @@ ipcMain.on("stop-counter", (e, args)=>{
   counting = false
   let {taskName, stopTime, spanId} = args
   
-  console.log(`stop-counter \ntaskName: ${taskName}\nstopTime: ${stopTime}\n`)
+  // console.log(`stop-counter \ntaskName: ${taskName}\nstopTime: ${stopTime}\n`)
   
   e.sender.send("stop-counter",{counting});
   updateSpan(args)
@@ -61,8 +61,10 @@ ipcMain.on("task-selection",(e,{task})=>{
 })
 
 ipcMain.on("create-new-task", (e, {task}) => {
-  newTask = insertTask( {taskName:task} );
-  e.sender.send("create-new-task", { task: task })
+  insertTask( {taskName:task} )
+  .then(newTask=> {
+    e.sender.send("create-new-task", { task: newTask })
+  });
 });
 
 // testTasks.forEach(ele=>insertTask({taskName: ele, startTime:Date.now(), endTime:null}))
