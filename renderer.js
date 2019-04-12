@@ -13,16 +13,9 @@ const Counter = require('./renderer/counter.js')
 const counter = new Counter(timerEl);
 
 buttonEl.addEventListener('click', toggleTimer);
-
 selectEl.addEventListener('change', selectElementChange);
 
-
-ipcRenderer.on('stop-counter', (e,args)=>{
-  counter.stopTimer();
-  counting = args.counting;    
-});
-
-
+// handle response from main process on timer start
 ipcRenderer.on('start-counter', (e,args)=>{
   let {spanId, startTime} = args
   counter.startTimer(startTime);  
@@ -30,8 +23,13 @@ ipcRenderer.on('start-counter', (e,args)=>{
   span = {spanId, startTime}
 });
 
+// handle response from main process on timer stop
+ipcRenderer.on('stop-counter', (e,args)=>{
+  counter.stopTimer();
+  counting = args.counting;    
+});
 
-// Populate Select bar with tasks from DB
+// populate select bar with tasks from DB
 ipcRenderer.on('populate-task-select', (e,{tasks})=> {
   addTasksToSelect(tasks, selectEl)
 });
@@ -87,37 +85,55 @@ function createInputElement(){
   return inputEl;  
 }
 
-// optNodes[optNodes.length-1].setAttribute('selected', true)
-
 function replaceElement(elem){
   return selectForm.replaceChild(elem, selectForm.children[0])
 }
 
 function createTitleDiv(){
+
+  // find current selected option
   let selectedOption = Array.from(selectEl).find(ele=> ele.selected)
+
+  // create div w/ relevant attributes
   let titleDiv = document.createElement('div')
   titleDiv.setAttribute('class', 'task-display');
   titleDiv.innerText = selectedOption.innerText
+
+  // return element
   return titleDiv;
 }
 
 function toggleTimer(){
   if (!taskName) return alert('Select a task');
+
   if(!counting){
+
+    // send taskname and start time to main process
     ipcRenderer.send('start-counter', { 
       startTime: Date.now(), 
       taskName: taskName,
     })
+
+    // change class name & text on start button 
     buttonEl.classList.replace('button-start','button-stop');
-    buttonEl.innerText = "stop";  
+    buttonEl.innerText = "stop";
+
+    // change select bar to div w/ task name displayed
     replaceElement(createTitleDiv())
+
   } else {
+
+    // send taskName, stoptime and span Id to main process
     ipcRenderer.send('stop-counter', { 
       stopTime: Date.now(), 
       taskName: taskName,
       spanId: span.spanId
     });
+
+    // replace title div w/ select bar
     replaceElement(selectEl)
+
+    // change class name & text on stop button 
     buttonEl.classList.replace('button-stop','button-start');
     buttonEl.innerText = "start";
   }
@@ -128,6 +144,7 @@ function addTasksToSelect(tasks, element){
     element.appendChild(createTaskElement(ele))
   });
 } 
+
 
 function createTaskElement(task){
   let optionEl = document.createElement('option');
