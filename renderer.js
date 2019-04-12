@@ -83,6 +83,7 @@ function createInputElement(){
   inputEl.setAttribute('style', 'width:100%;')
   inputEl.setAttribute('placeholder', 'Enter A Taskname...')
   inputEl.setAttribute('id', 'task-input')
+  inputEl.setAttribute('class', 'task-display')
   return inputEl;  
 }
 
@@ -95,6 +96,7 @@ function replaceElement(elem){
 function createTitleDiv(){
   let selectedOption = Array.from(selectEl).find(ele=> ele.selected)
   let titleDiv = document.createElement('div')
+  titleDiv.setAttribute('class', 'task-display');
   titleDiv.innerText = selectedOption.innerText
   return titleDiv;
 }
