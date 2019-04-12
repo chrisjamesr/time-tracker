@@ -106,6 +106,13 @@ form > select {
   outline: -webkit-focus-ring-color auto 5px;
 }
 
+#task-title {
+  padding: 2% 0 2% 2%;
+  width: 100%;
+  outline-offset: -2px;
+  outline: -webkit-focus-ring-color auto 5px;
+}
+
 div#timer {
   font: 3em "Courier New", sans-serif;
   letter-spacing: 5px;
