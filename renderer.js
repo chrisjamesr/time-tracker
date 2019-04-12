@@ -97,6 +97,7 @@ function createTitleDiv(){
   // create div w/ relevant attributes
   let titleDiv = document.createElement('div')
   titleDiv.setAttribute('class', 'task-display');
+  titleDiv.setAttribute('id', 'task-title');
   titleDiv.innerText = selectedOption.innerText
 
   // return element
