@@ -16,10 +16,12 @@ buttonEl.addEventListener('click', toggleTimer);
 
 selectEl.addEventListener('change', selectElementChange);
 
+
 ipcRenderer.on('stop-counter', (e,args)=>{
   counter.stopTimer();
   counting = args.counting;    
 });
+
 
 ipcRenderer.on('start-counter', (e,args)=>{
   let {spanId, startTime} = args
@@ -28,23 +30,41 @@ ipcRenderer.on('start-counter', (e,args)=>{
   span = {spanId, startTime}
 });
 
+
+// Populate Select bar with tasks from DB
 ipcRenderer.on('populate-task-select', (e,{tasks})=> {
   addTasksToSelect(tasks, selectEl)
 });
 
+
 function selectElementChange(event){
+  const body = document.getElementsByTagName('body')[0]
   if (event.target.value === "new-task"){
-    replaceElement(createInputElement())
-    selectForm.addEventListener('submit', (e)=>{
+    let inputEl = createInputElement()
+    replaceElement(inputEl)
+
+    inputEl.addEventListener('click', e=> e.stopPropagation());
+
+    selectForm.addEventListener('submit', (e) => {
       e.preventDefault();
       taskName = document.getElementById('task-input').value
       ipcRenderer.send('create-new-task', {task: taskName}); 
       replaceElement(selectEl);
-  })
+      body.removeEventListener('click', clickOffInput)
+    }, {once:true});
+    body.addEventListener('click', clickOffInput, {once:true});
   } else {
     ipcRenderer.send('task-selection', {task: event.target.value})
     taskName = event.target.value;
   }
+}
+
+function clickOffInput(e){
+  replaceElement(selectEl)
+  selectEl.selectedIndex = 0
+}
+function removeBodyEventListener(){
+  debugger
 }
 
 ipcRenderer.on('create-new-task', (e, {task}) => {
