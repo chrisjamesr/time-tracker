@@ -36,7 +36,12 @@ ipcRenderer.on('populate-task-select', (e,{tasks})=> {
   addTasksToSelect(tasks, selectEl)
 });
 
-
+// handle new task info post db insert
+ipcRenderer.on('create-new-task', (e, {task}) => {
+  let newTask = createTaskElement(task)
+  newTask.setAttribute('selected', true);
+  selectEl.appendChild(newTask)
+});
 
 function selectElementChange(event){
   const body = document.getElementsByTagName('body')[0]
@@ -81,12 +86,6 @@ function clickOffInput(e){
 function removeBodyEventListener(){
   debugger
 }
-
-ipcRenderer.on('create-new-task', (e, {task}) => {
-  let newTask = createTaskElement(task)
-  newTask.setAttribute('selected', true);
-  selectEl.appendChild(newTask)
-});
 
 function newTaskInput(){
   return document.getElementById('task-input')  
