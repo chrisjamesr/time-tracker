@@ -2,6 +2,8 @@ const {app, BrowserWindow, ipcMain} = require('electron')
 const path = require('path');
 const {insertTask, insertSpan, updateSpan, loadTasks, findTask} = require('./lib/db.js')
 const createMainWindow = require('./renderer/window.js')
+const createDashWindow = require('./renderer/dashboard/dash-window.js')
+// state variables
 let counting
 let win;
 let span;
@@ -14,14 +16,15 @@ app.on('ready', ()=>{
       win.webContents.on('did-finish-load', ()=> {
         win.webContents.send('populate-task-select', {tasks})
       });
-      console.log(tasks)
     });
 });
 
+ipcMain.on("show-dashboard",(e, {taskName}) => {
+  console.log("open dashboard")
+})  
+
 ipcMain.on("start-counter", (e, {taskName, startTime})=>{
   counting = true
-
-  // console.log(`start-counter\ntaskName: ${taskName}\nstartTime: ${startTime}\n`)
 
   insertSpan(taskName, startTime)
     .then(taskSpan=> {
@@ -43,16 +46,13 @@ ipcMain.on('populate-task-select', (e)=>{
 
 ipcMain.on("stop-counter", (e, args)=>{
   counting = false
-  let {taskName, stopTime, spanId} = args
-  
-  // console.log(`stop-counter \ntaskName: ${taskName}\nstopTime: ${stopTime}\n`)
-  
+  let {taskName, stopTime, spanId} = args;  
   e.sender.send("stop-counter",{counting});
   updateSpan(args)
 });
 
+//not in use, sends task loaded from db
 ipcMain.on("task-selection",(e,{task})=>{
-  console.log("task-selection" + "\n" +task)
   findTask(task)
     .then((t)=>{
       return t
@@ -66,5 +66,3 @@ ipcMain.on("create-new-task", (e, {task}) => {
     e.sender.send("create-new-task", { task: newTask })
   });
 });
-
-// testTasks.forEach(ele=>insertTask({taskName: ele, startTime:Date.now(), endTime:null}))
