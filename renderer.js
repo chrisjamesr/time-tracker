@@ -1,14 +1,16 @@
 const { ipcRenderer, BrowserWindow } = require('electron');
-require('devtron').install()
+// require('devtron').install()
 
 const buttonEl = document.getElementById("stop-start-button");
 let selectEl = document.getElementById("task-select");
 const timerEl = document.getElementById("timer");
 const selectForm = document.getElementById('select-form')
 
+// state variables
 let counting=  false;
 let taskName;
 let span;
+
 const Counter = require('./renderer/counter.js')
 const counter = new Counter(timerEl);
 
@@ -35,22 +37,37 @@ ipcRenderer.on('populate-task-select', (e,{tasks})=> {
 });
 
 
+
 function selectElementChange(event){
   const body = document.getElementsByTagName('body')[0]
+  // create a new task
   if (event.target.value === "new-task"){
+    // create input element to replace select input
     let inputEl = createInputElement()
-    replaceElement(inputEl)
-
+    replaceElement(inputEl) 
     inputEl.addEventListener('click', e=> e.stopPropagation());
 
+    // input element submit event 
     selectForm.addEventListener('submit', (e) => {
       e.preventDefault();
+
+      // set state taskname variable
       taskName = document.getElementById('task-input').value
+
+      // send task name to main process for new db entry
       ipcRenderer.send('create-new-task', {task: taskName}); 
+
+      // replace input with select element
       replaceElement(selectEl);
+
+      // remove body element listener after click away from input element  
       body.removeEventListener('click', clickOffInput)
+
     }, {once:true});
+
+    // add body element event listener to return select bar if clicked off text input
     body.addEventListener('click', clickOffInput, {once:true});
+
   } else {
     ipcRenderer.send('task-selection', {task: event.target.value})
     taskName = event.target.value;
@@ -105,7 +122,8 @@ function createTitleDiv(){
 }
 
 function toggleTimer(){
-  if (!taskName) return alert('Select a task');
+  //
+  if (!event.target.value) return alert("Please select a task")
 
   if(!counting){
 
