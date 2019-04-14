@@ -19,10 +19,6 @@ app.on('ready', ()=>{
     });
 });
 
-ipcMain.on("show-dashboard",(e, {taskName}) => {
-  console.log("open dashboard")
-})  
-
 ipcMain.on("start-counter", (e, {taskName, startTime})=>{
   counting = true
 
@@ -68,11 +64,12 @@ ipcMain.on("create-new-task", (e, {task}) => {
 });
 
 ipcMain.on("show-dashboard", (e)=>{
+  console.log("show dashboard")
   let dash = createDashWindow()
-  let tasks = loadTasks()
+  loadTasks()
     .then(tasks=>{
       dash.webContents.on("did-finish-load", (e)=>{
-        dash.webContents.send({tasks})
+        dash.webContents.send("load-dashboard",{tasks})
       })
     })
 })
