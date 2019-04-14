@@ -6,8 +6,8 @@ function createDashWindow(options){
   console.log('creating dashboard window')
 
   dashWindow = new BrowserWindow({
-    width: 300, 
-    height:200,
+    // width: 300, 
+    // height:200,
     // x: electron.screen.getPrimaryDisplay().bounds.width,
     // y: 0,
     fullscreenable: true,
