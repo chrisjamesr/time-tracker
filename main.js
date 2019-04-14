@@ -66,3 +66,13 @@ ipcMain.on("create-new-task", (e, {task}) => {
     e.sender.send("create-new-task", { task: newTask })
   });
 });
+
+ipcMain.on("show-dashboard", (e)=>{
+  let dash = createDashWindow()
+  let tasks = loadTasks()
+    .then(tasks=>{
+      dash.webContents.on("did-finish-load", (e)=>{
+        dash.webContents.send({tasks})
+      })
+    })
+})
