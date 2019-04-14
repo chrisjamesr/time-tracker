@@ -64,7 +64,6 @@ ipcMain.on("create-new-task", (e, {task}) => {
 });
 
 ipcMain.on("show-dashboard", (e)=>{
-  console.log("show dashboard")
   let dash = createDashWindow()
   loadTasks()
     .then(tasks=>{
