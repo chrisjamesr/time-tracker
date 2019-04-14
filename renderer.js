@@ -7,7 +7,7 @@ const timerEl = document.getElementById("timer");
 const selectForm = document.getElementById('select-form')
 
 // state variables
-let counting=  false;
+let counting = false;
 let taskName;
 let span;
 
@@ -16,6 +16,10 @@ const counter = new Counter(timerEl);
 
 buttonEl.addEventListener('click', toggleTimer);
 selectEl.addEventListener('change', selectElementChange);
+
+document.getElementById("show-dashboard").addEventListener('click', ()=>{
+  ipcRenderer.send('show-dashboard', {visible:true})
+})
 
 // handle response from main process on timer start
 ipcRenderer.on('start-counter', (e,args)=>{
@@ -42,6 +46,10 @@ ipcRenderer.on('create-new-task', (e, {task}) => {
   newTask.setAttribute('selected', true);
   selectEl.appendChild(newTask)
 });
+
+// ipcRenderer.on('show-dashboard', (e, {tasks})=>{
+//   console.log(tasks);
+// });
 
 function selectElementChange(event){
   const body = document.getElementsByTagName('body')[0]
@@ -74,6 +82,7 @@ function selectElementChange(event){
     body.addEventListener('click', clickOffInput, {once:true});
 
   } else {
+    document.getElementById("task-info").innerText = event.target.value
     ipcRenderer.send('task-selection', {task: event.target.value})
     taskName = event.target.value;
   }
@@ -170,6 +179,9 @@ function createTaskElement(task){
   optionEl.innerText = task.taskName;
   return optionEl
 }
+
+
+
 
 
 
