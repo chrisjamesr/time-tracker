@@ -1,9 +1,21 @@
+header {
+  padding: 1% 5%;
+}
+h1 {
+  text-align: center;
+}
+
 ul {
   list-style-type: none;
 }
 
 li {
-  padding: 2%;
+  padding: 2% 10%;
+  font-size: 1.5em;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
 .task-li {
@@ -11,9 +23,11 @@ li {
 }
 
 .task-li-name {
-
+  width: 40%;
+  margin-right: 10%;
 }
 
 .task-li-duration {
-
+  width: 40%;
+  margin-left: 10%;
 }
