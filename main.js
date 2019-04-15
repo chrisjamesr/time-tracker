@@ -64,6 +64,7 @@ ipcMain.on("create-new-task", (e, {task}) => {
 });
 
 ipcMain.on("show-dashboard", (e)=>{
+  if (BrowserWindow.getAllWindows().length > 1) return BrowserWindow.getAllWindows()[0].moveTop()
   let dash = createDashWindow()
   loadTasks()
     .then(tasks=>{
