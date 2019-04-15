@@ -101,6 +101,18 @@ form > select {
   outline-offset: -2px;
   outline: -webkit-focus-ring-color auto 5px;
 }
+#show-dashboard {
+  font: 400 1em system-ui;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%:
+  border-radius: 5px;
+  border-width: 1px solid rgb(166, 166, 166); 
+}
+
+#show-dashboard:hover{
+  font-weight: 700;
+}
 
 div#timer {
   font: 3em "Courier New", sans-serif;
