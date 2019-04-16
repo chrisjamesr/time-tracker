@@ -82,7 +82,7 @@ function selectElementChange(event){
     body.addEventListener('click', clickOffInput, {once:true});
 
   } else {
-    document.getElementById("task-info").innerText = event.target.value
+    // document.getElementById("task-info").innerText = event.target.value
     ipcRenderer.send('task-selection', {task: event.target.value})
     taskName = event.target.value;
   }
@@ -117,28 +117,27 @@ function replaceElement(elem){
 function createTitleDiv(){
 
   // find current selected option
-  let selectedOption = Array.from(selectEl).find(ele=> ele.selected)
-
+  // let selectedOption = Array.from(selectEl).find(ele=> ele.selected)
+  if(selectedOption().value === "null") return alert('select a task')
   // create div w/ relevant attributes
   let titleDiv = document.createElement('div')
   titleDiv.setAttribute('class', 'task-display');
   titleDiv.setAttribute('id', 'task-title');
-  titleDiv.innerText = selectedOption.innerText
+  titleDiv.innerText = selectedOption().name
 
   // return element
   return titleDiv;
 }
 
 function toggleTimer(){
-  //
-  if (!event.target.value) return alert("Please select a task")
-
+  let {name, value} = selectedOption()
   if(!counting){
-
+    // let {name, value} = selectedOption()
     // send taskname and start time to main process
     ipcRenderer.send('start-counter', { 
       startTime: Date.now(), 
-      taskName: taskName,
+      taskName: name,
+      taskId: value
     })
 
     // change class name & text on start button 
@@ -153,7 +152,7 @@ function toggleTimer(){
     // send taskName, stoptime and span Id to main process
     ipcRenderer.send('stop-counter', { 
       stopTime: Date.now(), 
-      taskName: taskName,
+      taskId: value,
       spanId: span.spanId
     });
 
@@ -175,11 +174,16 @@ function addTasksToSelect(tasks, element){
 
 function createTaskElement(task){
   let optionEl = document.createElement('option');
-  optionEl.value = task.taskName;
+  optionEl.value = task._id;
+  optionEl.name = task.taskName;
   optionEl.innerText = task.taskName;
   return optionEl
 }
 
+function selectedOption(){
+  console.log(Array.from(selectEl).find(ele=> ele.selected))
+  return Array.from(selectEl).find(ele=> ele.selected)
+}
 
 
 
