@@ -22,10 +22,6 @@ document.getElementById("show-dashboard").addEventListener('click', ()=>{
   ipcRenderer.send('show-dashboard', /*{visible:true}*/)
 })
 
-ipcRenderer.on('load-dashboard', (e, visible) => {
-  dashboard=visible
-})
-
 // handle response from main process on timer start
 ipcRenderer.on('start-counter', (e,args)=>{
   let {spanId, startTime} = args
