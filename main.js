@@ -1,6 +1,6 @@
 const {app, BrowserWindow, ipcMain} = require('electron')
 const path = require('path');
-const {findOrCreateTask, insertTask, insertSpan, updateSpan, loadTasks, findTask} = require('./lib/db.js')
+const {findOrCreateTask, taskSpanDuration, insertTask, insertSpan, updateSpan, loadTasks, findTask} = require('./lib/db.js')
 // const {findOrCreateTask, insertTask, insertSpan, updateSpan, loadTasks, findTask} = findOrCreateTaske('./lib/db.js')
 const createMainWindow = require('./renderer/window.js')
 const createDashWindow = require('./renderer/dashboard/dash-window.js')
@@ -68,10 +68,12 @@ ipcMain.on("create-new-task", (e, {task}) => {
 ipcMain.on("show-dashboard", (e)=>{
   if (BrowserWindow.getAllWindows().length > 1) return BrowserWindow.getAllWindows()[0].moveTop()
   let dash = createDashWindow()
-  loadTasks()
+  // loadTasks()
+  taskSpanDuration()
     .then(tasks=>{
+      console.log(tasks)
       dash.webContents.on("did-finish-load", (e)=>{
-        dash.webContents.send("load-dashboard",{tasks})
+        dash.webContents.send("load-dashboard",tasks)
       })
     })
 })
