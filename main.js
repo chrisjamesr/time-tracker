@@ -65,15 +65,23 @@ ipcMain.on("create-new-task", (e, {task}) => {
   });
 });
 
-ipcMain.on("show-dashboard", (e)=>{
-  if (BrowserWindow.getAllWindows().length > 1) return BrowserWindow.getAllWindows()[0].moveTop()
-  let dash = createDashWindow()
-  // loadTasks()
-  taskSpanDuration()
-    .then(tasks=>{
-      console.log(tasks)
-      dash.webContents.on("did-finish-load", (e)=>{
-        dash.webContents.send("load-dashboard",tasks)
+ipcMain.on("show-dashboard", (e) => {
+  let dash, channel;
+
+  if (BrowserWindow.getAllWindows().length <= 1) {
+    dash = createDashWindow()  
+    taskSpanDuration()
+    .then(tasks => {
+      dash.webContents.on("did-finish-load", (e)=> {
+        dash.webContents.send("load-dashboard", {tasks})
       })
     })
-})
+  } else {
+    dash = BrowserWindow.getAllWindows()[0]
+    dash.moveTop()
+    taskSpanDuration()
+    .then(tasks => {
+      dash.webContents.send("reload-dashboard",{tasks})
+    })
+  }
+});
