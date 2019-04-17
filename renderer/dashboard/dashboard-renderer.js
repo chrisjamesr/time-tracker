@@ -2,17 +2,23 @@ const { ipcRenderer, BrowserWindow } = require('electron');
 
 let taskUl = document.getElementById('tasks-list') 
 
-ipcRenderer.on("load-dashboard", (e,tasks) => {
-  console.log(tasks)
+ipcRenderer.on("load-dashboard", (e,{tasks}) => {
   if (!Object.entries(tasks).length) return taskUl.append(document.createTextNode("no tasks to display"))
   Object.entries(tasks).forEach( t => {
-    console.log(t);
+    taskUl.appendChild(createTaskLi(t))
+  })
+})
+
+ipcRenderer.on("reload-dashboard", (e,{tasks}) => {
+  console.log('reloading...')
+  taskUl.innerHTML = ''
+  if (!Object.entries(tasks).length) return taskUl.append(document.createTextNode("no tasks to display"))
+  Object.entries(tasks).forEach( t => {
     taskUl.appendChild(createTaskLi(t))
   })
 })
 
 function createTaskLi(t){
-  debugger
   let [taskName, {taskId, duration}] = t
   let task = document.createElement('li')
   task.value = taskId
@@ -24,13 +30,17 @@ function createTaskLi(t){
   taskNameSpan.classList.add('task-li-name')
   
   let taskDurationSpan = document.createElement('span')
-  taskDurationSpan.innerText = `${duration/1000} seconds`
+  taskDurationSpan.innerText = parseSpanTime(duration)
   taskDurationSpan.classList.add('task-li-duration')
 
   task.appendChild(taskNameSpan)
   task.appendChild(taskDurationSpan)
 
   return task
+}
+
+function clearTaskLi(){
+  taskUl.innerHTML = ''
 }
 
 // function createTaskLiContent({taskName, duration}){
@@ -43,15 +53,21 @@ function createTaskLi(t){
 //   return {taskName, taskDuration}
 // }
 
-// const parseSpanTime = ({startTime, stopTime}) => {
-//   return {
-//     seconds: Math.floor(Math.abs((start - Date.now())/1000)) % 60,
-//     minutes: Math.floor(Math.abs((start - Date.now())/1000)/ 60)
-//     hours: Math.floor(Math.abs((start - Date.now())/1000)/ 60 / 60)
-//   }
-// }
+const parseSpanTime = (duration) => {
+  return displaySpanTime({
+      seconds: Math.floor(duration / 1000) % 60,
+      minutes: Math.floor(duration / 1000  / 60),
+      hours: Math.floor(duration / 1000 / 60 / 60)
+    });
+}
 
-// const displaySpanTime = ({minutes, hours}) => {
-//   let spanString = ''
-//   if (minutes < 0) spanString = seconds > 1 ? `${seconds}`
-// }
+const displaySpanTime = ({seconds, minutes, hours}) => {
+  let spanString = !!seconds ? `${seconds} seconds` : ''
+  if (minutes > 0) {
+    spanString = `${minutes} min, ${spanString}`
+  }
+  if (!!hours) {
+    spanString = `${hours} hours, ${spanString}`
+  }
+  return spanString;
+}
