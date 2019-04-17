@@ -18,7 +18,7 @@ buttonEl.addEventListener('click', toggleTimer);
 selectEl.addEventListener('change', selectElementChange);
 
 document.getElementById("show-dashboard").addEventListener('click', ()=>{
-  ipcRenderer.send('show-dashboard', {visible:true})
+  ipcRenderer.send('show-dashboard', /*{visible:true}*/)
 })
 
 // handle response from main process on timer start
@@ -81,11 +81,10 @@ function selectElementChange(event){
     // add body element event listener to return select bar if clicked off text input
     body.addEventListener('click', clickOffInput, {once:true});
 
-  } else {
-    // document.getElementById("task-info").innerText = event.target.value
+  } /*else {
     ipcRenderer.send('task-selection', {task: event.target.value})
     taskName = event.target.value;
-  }
+  }*/
 }
 
 function clickOffInput(e){
@@ -117,8 +116,8 @@ function replaceElement(elem){
 function createTitleDiv(){
 
   // find current selected option
-  // let selectedOption = Array.from(selectEl).find(ele=> ele.selected)
   if(selectedOption().value === "null") return alert('select a task')
+    
   // create div w/ relevant attributes
   let titleDiv = document.createElement('div')
   titleDiv.setAttribute('class', 'task-display');
@@ -131,6 +130,7 @@ function createTitleDiv(){
 
 function toggleTimer(){
   let {name, value} = selectedOption()
+  if(value === "null") return alert('select a task')
   if(!counting){
     // let {name, value} = selectedOption()
     // send taskname and start time to main process
