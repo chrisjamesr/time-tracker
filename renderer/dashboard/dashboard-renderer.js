@@ -18,13 +18,13 @@ ipcRenderer.on("reload-dashboard", (e,{tasks}) => {
   })
 })
 
+document.getElementsByClassName('task-li-name')
+
 function createTaskLi(t){
   let [taskName, {taskId, duration}] = t
-  let task = document.createElement('li')
-  task.value = taskId
+  let taskLi = document.createElement('li')  
   // task.id = t.taskName.split(' ').map(t=> t.toLowerCase()).join('-')
-  task.classList.add('task-li')
-
+  
   let taskNameSpan = document.createElement('span')
   taskNameSpan.innerText = taskName
   taskNameSpan.classList.add('task-li-name')
@@ -33,15 +33,19 @@ function createTaskLi(t){
   taskDurationSpan.innerText = parseSpanTime(duration)
   taskDurationSpan.classList.add('task-li-duration')
 
-  task.appendChild(taskNameSpan)
-  task.appendChild(taskDurationSpan)
+  taskLi.appendChild(taskNameSpan);
+  taskLi.appendChild(taskDurationSpan);
+  taskLi.classList.add('task-li');
+  taskLi.setAttribute('value', taskId);
+  return taskLi;
 
-  return task
 }
 
 function clearTaskLi(){
   taskUl.innerHTML = ''
 }
+
+
 
 // function createTaskLiContent({taskName, duration}){
 //   let taskName = document.createElement('span')
