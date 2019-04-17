@@ -10,6 +10,7 @@ const selectForm = document.getElementById('select-form')
 let counting = false;
 let taskName;
 let span;
+let dashboard = false;
 
 const Counter = require('./renderer/counter.js')
 const counter = new Counter(timerEl);
@@ -19,6 +20,10 @@ selectEl.addEventListener('change', selectElementChange);
 
 document.getElementById("show-dashboard").addEventListener('click', ()=>{
   ipcRenderer.send('show-dashboard', /*{visible:true}*/)
+})
+
+ipcRenderer.on('load-dashboard', (e, visible) => {
+  dashboard=visible
 })
 
 // handle response from main process on timer start
@@ -90,9 +95,6 @@ function selectElementChange(event){
 function clickOffInput(e){
   replaceElement(selectEl)
   selectEl.selectedIndex = 0
-}
-function removeBodyEventListener(){
-  debugger
 }
 
 function newTaskInput(){
@@ -184,9 +186,3 @@ function selectedOption(){
   console.log(Array.from(selectEl).find(ele=> ele.selected))
   return Array.from(selectEl).find(ele=> ele.selected)
 }
-
-
-
-
-
-
