@@ -57,6 +57,12 @@ ipcMain.on("task-selection",(e,{task})=>{
     .catch(e=> console.log(e));
 })
 
+ipcMain.on('show-dash-task', (e, args)=>{
+  console.log(args)
+  let dashWindow = BrowserWindow.getAllWindows()[0]
+  dashWindow.webContents.loadURL(path.join('file://', __dirname, '/renderer/dashboard/show-task.html'));
+})
+
 ipcMain.on("create-new-task", (e, {task}) => {
   // insertTask( {taskName:task} )
   findOrCreateTask( {taskName:task} )
