@@ -24,6 +24,7 @@ ul {
 .task-li-name {
   width: 40%;
   margin-right: 10%;
+  cursor: pointer;
 
 }
 
