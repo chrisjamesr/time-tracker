@@ -22,14 +22,13 @@ ipcRenderer.on("reload-dashboard", (e,{tasks}) => {
 // document.getElementsByClassName('task-li-name').addEventListener('click', showTask);
 
 function showTask(e){
-  debugger
   let taskId = e.target.parentElement.getAttribute('value');
   ipcRenderer.send('show-dash-task', {taskId});
 }
 
-ipcRenderer.on('show-dash-task', (e, args)=>{
-  console.log(args)
-})
+// ipcRenderer.on('show-dash-task', (e, args)=>{
+  
+// })
 
 function createTaskLi(t){
   let [taskName, {taskId, duration}] = t
