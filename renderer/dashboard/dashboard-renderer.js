@@ -18,7 +18,18 @@ ipcRenderer.on("reload-dashboard", (e,{tasks}) => {
   })
 })
 
-document.getElementsByClassName('task-li-name')
+// add event listener to open task show page
+// document.getElementsByClassName('task-li-name').addEventListener('click', showTask);
+
+function showTask(e){
+  debugger
+  let taskId = e.target.parentElement.getAttribute('value');
+  ipcRenderer.send('show-dash-task', {taskId});
+}
+
+ipcRenderer.on('show-dash-task', (e, args)=>{
+  console.log(args)
+})
 
 function createTaskLi(t){
   let [taskName, {taskId, duration}] = t
@@ -28,6 +39,7 @@ function createTaskLi(t){
   let taskNameSpan = document.createElement('span')
   taskNameSpan.innerText = taskName
   taskNameSpan.classList.add('task-li-name')
+  taskNameSpan.addEventListener('click', showTask)
   
   let taskDurationSpan = document.createElement('span')
   taskDurationSpan.innerText = parseSpanTime(duration)
@@ -46,18 +58,7 @@ function clearTaskLi(){
 }
 
 
-
-// function createTaskLiContent({taskName, duration}){
-//   let taskName = document.createElement('span')
-//   taskName.innerText = t.taskName
-//   taskName.classList.add('task-li-name')
-//   let taskDuration = document.createElement('span')
-//   taskDuration.innerText = 0
-//   taskDuration.classList.add('task-li-duration')
-//   return {taskName, taskDuration}
-// }
-
-const parseSpanTime = (duration) => {
+function parseSpanTime(duration){
   return displaySpanTime({
       seconds: Math.floor(duration / 1000) % 60,
       minutes: Math.floor(duration / 1000  / 60),
@@ -65,7 +66,7 @@ const parseSpanTime = (duration) => {
     });
 }
 
-const displaySpanTime = ({seconds, minutes, hours}) => {
+function displaySpanTime({seconds, minutes, hours}){
   let spanString = !!seconds ? `${seconds} seconds` : ''
   if (minutes > 0) {
     spanString = `${minutes} min, ${spanString}`
