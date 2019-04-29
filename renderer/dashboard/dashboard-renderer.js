@@ -26,9 +26,9 @@ function showTask(e){
   ipcRenderer.send('show-dash-task', {taskId});
 }
 
-// ipcRenderer.on('show-dash-task', (e, args)=>{
-  
-// })
+ipcRenderer.on("show-dash-task", (e, args)=>{
+  console.log(e,args)  ;
+})
 
 function createTaskLi(t){
   let [taskName, {taskId, duration}] = t
