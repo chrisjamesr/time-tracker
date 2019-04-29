@@ -91,3 +91,7 @@ ipcMain.on("show-dashboard", (e) => {
     })
   }
 });
+
+ipcMain.on("show-dash-task", (e, args) => {
+  console.log(args);
+})
