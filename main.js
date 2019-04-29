@@ -58,7 +58,6 @@ ipcMain.on("task-selection",(e,{task})=>{
 })
 
 ipcMain.on('show-dash-task', (e, args)=>{
-  console.log(args)
   let dashWindow = BrowserWindow.getAllWindows()[0]
   dashWindow.webContents.loadURL(path.join('file://', __dirname, '/renderer/dashboard/show-task.html'));
 })
@@ -92,6 +91,6 @@ ipcMain.on("show-dashboard", (e) => {
   }
 });
 
-ipcMain.on("show-dash-task", (e, args) => {
-  console.log(args);
+ipcMain.on("show-dash-task", (e, {taskId}) => {
+  e.sender.send("show-dash-task", {taskSpans: taskSpanDuration(taskId)});
 })
